@@ -21,14 +21,14 @@ app.use(cookieParser());
 // Routes
 app.use('/guest', guestRoutes);
 app.use('/admin', adminRoutes);
-app.use('/auth', authRoutes);
 
 // app.get('/dashboard', authenticateToken, (req, res) => {
-//   res.render('signup/dashboard', { user: req.user });
-// });
-
+  //   res.render('signup/dashboard', { user: req.user });
+  // });
+  
+app.use('/auth', authRoutes);
 app.get('/', (req, res) => {
-  res.redirect('/auth/login');
+  res.redirect('/auth/register');
 });
 
 
