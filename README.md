@@ -66,10 +66,11 @@ A simple Blog Web App built with Express.js, EJS templates, and JWT following th
 
 
 ## API Routes
+- Application Entry point: `http://localhost:3000/`
 
 ### Authentication Routes
 - `POST /auth/register`: User registration
 - `POST /auth/login`: User login
 - `GET /auth/logout`: User logout
-- `GET /dashboard`: Protected dashboard
+- `GET admin/dashboard`: Protected admin dashboard along with CRUD functionality
 
