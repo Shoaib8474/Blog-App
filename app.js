@@ -1,47 +1,41 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
-const authRoutes = require('./routes/authRoutes');
-const path = require('path');
-const sequelize = require('./config/database');
-const guestRoutes = require('./routes/guestRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-const {authenticateToken} = require('./middlewares/authMiddleware');
-require('dotenv').config();
-
 const app = express();
+const userRoutes = require('./routes/userRoutes');
+const profileRoutes = require('./routes/profileRoutes');
+const articleRoutes = require('./routes/articleRoutes');
+const authRoutes = require('./routes/authRoutes');
+const followRoutes = require('./routes/followRoutes');
+const { sequelize, Follow } = require('./models');
+const cookieParser = require('cookie-parser');
+require('dotenv').config();
+// const seedDatabase = require('./seeders/seedDatabase')
 
-app.set('views', path.join(__dirname, 'views'));
+
+// Middleware
 app.set('view engine', 'ejs');
-
-// Parsing Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+// app.use(express.static('public'));
 
-// Routes
-app.use('/guest', guestRoutes);
-app.use('/admin', adminRoutes);
 
-// app.get('/dashboard', authenticateToken, (req, res) => {
-  //   res.render('signup/dashboard', { user: req.user });
-  // });
-  
 app.use('/auth', authRoutes);
 app.get('/', (req, res) => {
   res.redirect('/auth/register');
 });
 
+// Routes
+app.use('/articles', articleRoutes);
+app.use('/profiles', profileRoutes);
+// app.use('/user', userRoutes);
+// app.use('/follows', followRoutes);
 
-
-
-// Database sync and server start
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000
+// Sync Database
 sequelize.sync()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch(error => {
-    console.error('Unable to connect to the database:', error);
-  });
+    .then(() => {
+        // seedDatabase()
+        console.log('Database connected and synced.');
+        app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+    })
+    .catch(err => console.error('Database connection failed:', err));
